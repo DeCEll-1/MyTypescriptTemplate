@@ -6,7 +6,7 @@
         {
             "label": "build",
             "type": "shell",
-            "command": "tsc",
+            "command": "tsc --watch",
             "problemMatcher": [],
             "group": {
                 "kind": "build",
