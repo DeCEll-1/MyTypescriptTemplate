@@ -9,18 +9,36 @@
 <body>
 
     <script>
+        
+        function addScript(s) {
+            const script = document.createElement('script');
+            script.src = s;
+            script.type = "module"
+            document.head.appendChild(script);
+            return script;
+        }
+
+        function checkAddMain() {
+            if (loadeds.every(s => s))
+                addScript("./dist/index.js");
+        }
+
         const isDev = window.location.hostname.includes("localhost") || window.location.hostname === '127.0.0.1';
-        const scriptUrls = []
+        const scriptUrls = [];
+        const loadeds = [];
         scriptUrls.forEach(u => {
             if (isDev) {
-                u.replace(".js", "dev.js")
+                u = u.replace(".js", ".dev.js");
             } else {
-                u.replace(".js", "min.js")
+                u = u.replace(".js", ".min.js");
             }
-            const script = document.createElement('script');
-            script.src = u;
-            document.head.appendChild(script);
+            loadeds[u] = false;
+            addScript(u).onload = () => {
+                loadeds[u] = true;
+                checkAddMain();
+            };
         })
+
     </script>
 
     <script type="module" src="dist/index.js"></script>
