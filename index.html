@@ -1,0 +1,30 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CodeToKroki</title>
+</head>
+
+<body>
+
+    <script>
+        const isDev = window.location.hostname.includes("localhost") || window.location.hostname === '127.0.0.1';
+        const scriptUrls = []
+        scriptUrls.forEach(u => {
+            if (isDev) {
+                u.replace(".js", "dev.js")
+            } else {
+                u.replace(".js", "min.js")
+            }
+            const script = document.createElement('script');
+            script.src = u;
+            document.head.appendChild(script);
+        })
+    </script>
+
+    <script type="module" src="dist/index.js"></script>
+
+</body>
+
+</html>
