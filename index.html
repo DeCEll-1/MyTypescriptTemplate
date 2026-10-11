@@ -10,10 +10,14 @@
 
     <script>
         
+const isDev = window.location.hostname.includes("localhost") || window.location.hostname === '127.0.0.1';
+        const scriptUrls = [];
+        const loadeds = scriptUrls.map(s => false);
+
         function addScript(s) {
             const script = document.createElement('script');
             script.src = s;
-            script.type = "module"
+            // script.type = "module"
             document.head.appendChild(script);
             return script;
         }
@@ -22,19 +26,18 @@
             if (loadeds.every(s => s))
                 addScript("./dist/index.js");
         }
-
-        const isDev = window.location.hostname.includes("localhost") || window.location.hostname === '127.0.0.1';
-        const scriptUrls = [];
-        const loadeds = [];
+        let i = 0;
         scriptUrls.forEach(u => {
-            if (isDev) {
-                u = u.replace(".js", ".dev.js");
-            } else {
-                u = u.replace(".js", ".min.js");
-            }
-            loadeds[u] = false;
+            const isMinAlready = u.includes(".min");
+            if (!isMinAlready)
+                if (isDev) {
+                    u = u.replace(".js", ".dev.js");
+                } else {
+                    u = u.replace(".js", ".min.js");
+                }
             addScript(u).onload = () => {
-                loadeds[u] = true;
+                loadeds[i] = true;
+                i++;
                 checkAddMain();
             };
         })
